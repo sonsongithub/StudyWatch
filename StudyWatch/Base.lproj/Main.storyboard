@@ -23,17 +23,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T8e-p3-Y99" customClass="BackView" customModule="StudyWatch" customModuleProvider="target">
-                                <rect key="frame" x="24" y="20" width="327" height="327"/>
+                                <rect key="frame" x="28" y="64" width="319" height="319"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pYu-9z-akk" customClass="ShortHandView" customModule="StudyWatch" customModuleProvider="target">
-                                        <rect key="frame" x="159" y="0.0" width="8" height="327"/>
+                                        <rect key="frame" x="155.5" y="0.0" width="8" height="319"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="8" id="JqA-KO-2vH"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uaX-R2-aMQ" customClass="LongHandView" customModule="StudyWatch" customModuleProvider="target">
-                                        <rect key="frame" x="159" y="0.0" width="8" height="327"/>
+                                        <rect key="frame" x="155.5" y="0.0" width="8" height="319"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="8" id="dxU-jJ-P6D"/>
@@ -52,7 +52,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="szO-mp-xhZ">
-                                <rect key="frame" x="8" y="579" width="359" height="44"/>
+                                <rect key="frame" x="8" y="615" width="359" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Hl5-G1-ffH"/>
                                 </constraints>
@@ -61,42 +61,46 @@
                                     <action selector="decideWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9mG-4U-hVX"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CFX-cR-oGz">
-                                <rect key="frame" x="8" y="631" width="359" height="29"/>
-                                <segments>
-                                    <segment title="Level 1"/>
-                                    <segment title="Level 2"/>
-                                    <segment title="Level 3"/>
-                                </segments>
-                                <connections>
-                                    <action selector="levelWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="XDi-av-OtT"/>
-                                </connections>
-                            </segmentedControl>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fFi-6Y-Xyz">
-                                <rect key="frame" x="0.0" y="355" width="375" height="216"/>
+                                <rect key="frame" x="0.0" y="391" width="375" height="216"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="zq2-8x-1l7"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="z63-KR-wOR"/>
                                 </connections>
                             </pickerView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CFX-cR-oGz">
+                                <rect key="frame" x="8" y="28" width="359" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="cdO-lf-o4i"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Level 1"/>
+                                    <segment title="Level 2"/>
+                                    <segment title="Level 3"/>
+                                    <segment title="Level 4"/>
+                                    <segment title="Level 5"/>
+                                    <segment title="Level 6"/>
+                                </segments>
+                                <connections>
+                                    <action selector="levelWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="XDi-av-OtT"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="szO-mp-xhZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="D6q-mH-6ED"/>
-                            <constraint firstAttribute="trailing" secondItem="szO-mp-xhZ" secondAttribute="trailing" constant="8" id="KWt-eW-lOJ"/>
-                            <constraint firstItem="szO-mp-xhZ" firstAttribute="top" secondItem="fFi-6Y-Xyz" secondAttribute="bottom" constant="8" id="Loa-tC-Cag"/>
-                            <constraint firstAttribute="trailing" secondItem="CFX-cR-oGz" secondAttribute="trailing" constant="8" id="OL7-Uu-DLa"/>
-                            <constraint firstItem="CFX-cR-oGz" firstAttribute="top" secondItem="szO-mp-xhZ" secondAttribute="bottom" constant="8" id="RjO-3g-2du"/>
-                            <constraint firstItem="T8e-p3-Y99" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ucv-Tt-IES"/>
-                            <constraint firstItem="T8e-p3-Y99" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WwE-LJ-8hN"/>
-                            <constraint firstItem="T8e-p3-Y99" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yqn-nj-TXF"/>
-                            <constraint firstItem="T8e-p3-Y99" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="jJr-BF-SZp"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="CFX-cR-oGz" secondAttribute="bottom" constant="8" id="jLl-k1-U5e"/>
-                            <constraint firstAttribute="trailing" secondItem="fFi-6Y-Xyz" secondAttribute="trailing" id="mxe-Cj-ef5"/>
-                            <constraint firstItem="CFX-cR-oGz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="nrX-bZ-VbZ"/>
-                            <constraint firstItem="fFi-6Y-Xyz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rcV-zi-cvh"/>
-                            <constraint firstItem="T8e-p3-Y99" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tXg-JG-hBj"/>
-                            <constraint firstItem="fFi-6Y-Xyz" firstAttribute="top" secondItem="T8e-p3-Y99" secondAttribute="bottom" constant="8" id="ur7-UN-vod"/>
+                            <constraint firstItem="szO-mp-xhZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="2W8-CB-5CX"/>
+                            <constraint firstItem="szO-mp-xhZ" firstAttribute="top" secondItem="fFi-6Y-Xyz" secondAttribute="bottom" constant="8" id="4OP-8z-TqU"/>
+                            <constraint firstAttribute="trailing" secondItem="CFX-cR-oGz" secondAttribute="trailing" constant="8" id="8Df-Cp-3W9"/>
+                            <constraint firstItem="fFi-6Y-Xyz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="D62-VW-nE9"/>
+                            <constraint firstItem="CFX-cR-oGz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="FbO-ii-VmM"/>
+                            <constraint firstItem="T8e-p3-Y99" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VCK-kv-yZl"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="szO-mp-xhZ" secondAttribute="bottom" constant="8" id="blH-7p-iPS"/>
+                            <constraint firstItem="T8e-p3-Y99" firstAttribute="top" secondItem="CFX-cR-oGz" secondAttribute="bottom" constant="8" id="g5c-Gb-E2s"/>
+                            <constraint firstItem="szO-mp-xhZ" firstAttribute="top" secondItem="fFi-6Y-Xyz" secondAttribute="bottom" constant="8" id="gEQ-5r-RQs"/>
+                            <constraint firstAttribute="trailing" secondItem="fFi-6Y-Xyz" secondAttribute="trailing" id="krj-I0-kg2"/>
+                            <constraint firstAttribute="trailing" secondItem="szO-mp-xhZ" secondAttribute="trailing" constant="8" id="lN7-Ts-ief"/>
+                            <constraint firstItem="CFX-cR-oGz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="yvT-Rt-fgr"/>
+                            <constraint firstItem="fFi-6Y-Xyz" firstAttribute="top" secondItem="T8e-p3-Y99" secondAttribute="bottom" constant="8" id="zTl-DK-2j7"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>

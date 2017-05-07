@@ -9,6 +9,91 @@
 import UIKit
 import AVFoundation
 
+enum Level: Int {
+    case novice = 60
+    case basic = 30
+    case fundamental = 15
+    case intermediate = 10
+    case advanced = 5
+    case professional = 1
+    
+    var hour: Int {
+        return Int(arc4random() % 12)
+    }
+    
+    var step: UInt32 {
+        return UInt32(60 / self.rawValue)
+    }
+    
+    var minute: Int {
+        return Int(arc4random() % self.step) * self.rawValue
+    }
+    
+    func hour(at index: Int) -> Int {
+        return index
+    }
+    
+    func minute(at index: Int) -> Int {
+        return self.rawValue * index
+    }
+
+    var time: Time {
+        return Time(hour: hour, minute: minute)
+    }
+    
+    static func create(with index: Int) -> Level {
+        switch index {
+        case 0:
+            return .novice
+        case 1:
+            return .basic
+        case 2:
+            return .fundamental
+        case 3:
+            return .intermediate
+        case 4:
+            return .advanced
+        case 5:
+            return .professional
+        default:
+            return .novice
+        }
+    }
+    
+    var numberOfRowsInMinuteComponent: Int {
+        return Int(step)
+    }
+    
+    func titleFor(row: Int) -> String {
+        return "\(row * self.rawValue)"
+    }
+}
+
+struct Time: Equatable {
+    let hour: Int
+    let minute: Int
+    
+    var speakingText: String {
+        if minute == 0 {
+            return "\(hour)じでした"
+        } else {
+            return "\(hour)じ\(minute)ふんでした"
+        }
+    }
+    
+    static func == (left : Time, right : Time) -> Bool {
+        return (left.hour == right.hour && left.minute == right.minute)
+    }
+}
+
+extension UIPickerView {
+    func time(level: Level) -> Time {
+        let indexOfHour = self.selectedRow(inComponent: 0)
+        let indexOfMinute = self.selectedRow(inComponent: 1)
+        return Time(hour: level.hour(at: indexOfHour), minute: level.minute(at: indexOfMinute))
+    }
+}
+
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     @IBOutlet var longHand: LongHandView!
     @IBOutlet var shortHand: ShortHandView!
@@ -23,32 +108,21 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var badSound: AVAudioPlayer!
     var questionSound: AVAudioPlayer!
     
-    var level: Level = .easy {
+    var time: Time = Time(hour: 0, minute: 0) {
+        didSet {
+            updateHands()
+        }
+    }
+    
+    var level: Level = .novice {
         didSet {
             picker.reloadAllComponents()
             nextQuestion()
         }
     }
     
-    enum Level: Int {
-        case easy = 0
-        case midium = 1
-        case difficult = 2
-    }
-    
     func nextQuestion() {
-        self.hour = Int(arc4random() % 12)
-        
-        
-        switch level {
-        case .easy:
-            self.minute = Int(arc4random() % 4) * 0
-        case .midium:
-            self.minute = Int(arc4random() % 12) * 5
-        case .difficult:
-            self.minute = Int(arc4random() % 60)
-        }
-        
+        time = level.time
         self.questionSound.play()
     }
     
@@ -59,21 +133,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         backView.layoutLabels()
     }
     
-    var speakingText: String {
-        if minute == 0 {
-            return "せいかいは\(hour)じでした"
-        } else {
-            return "せいかいは\(hour)じ\(minute)ふんでした"
-        }
-    }
-    
     @IBAction func decide(sender: Any) {
-        print(#function)
-        
         if check() {
             goodSound.play()
             if !synthesizer.isSpeaking {
-                let utterance = AVSpeechUtterance(string: speakingText)
+                let utterance = AVSpeechUtterance(string: time.speakingText)
                 utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
                 synthesizer.speak(utterance)
             }
@@ -86,47 +150,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         } else {
             badSound.play()
         }
-        
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.init(uptimeNanoseconds: 2000000)) {
-//        }
-        
     }
     
     func check() -> Bool {
-        let ansHour = picker.selectedRow(inComponent: 0)
-        let ansMinute = picker.selectedRow(inComponent: 1)
-        
-        switch level {
-        case .easy:
-            if hour == ansHour && minute == ansMinute * 0 {
-                return true
-            }
-        case .midium:
-            if hour == ansHour && minute == ansMinute * 5 {
-                return true
-            }
-        case .difficult:
-            if hour == ansHour && minute == ansMinute {
-                return true
-            }
-        }
-        return false
+        let input = picker.time(level: level)
+        return input == time
     }
     
     @IBAction func level(sender: Any) {
-        print(#function)
-        if let seg = sender as? UISegmentedControl {
-            print(seg.selectedSegmentIndex)
-            switch seg.selectedSegmentIndex {
-            case 0:
-                self.level = .easy
-            case 1:
-                self.level = .midium
-            case 2:
-                self.level = .difficult
-            default:
-                self.level = .difficult
-            }
+        if let segment = sender as? UISegmentedControl {
+            level = Level.create(with: segment.selectedSegmentIndex)
         }
     }
     
@@ -140,14 +173,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         if component == 0 {
             return 12
         } else {
-            switch level {
-            case .easy:
-                return 1
-            case .midium:
-                return 12
-            case .difficult:
-                return 60
-            }
+            return level.numberOfRowsInMinuteComponent
         }
     }
     
@@ -155,20 +181,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         if component == 0 {
             return "\(row)"
         } else {
-            switch level {
-            case .easy:
-                return "\(row * 15)"
-            case .midium:
-                return "\(row * 5)"
-            case .difficult:
-                return "\(row)"
-            }
+            return level.titleFor(row: row)
         }
     }
     
     //選択時
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("列: \(row)")
     }
     
     override func didReceiveMemoryWarning() {
@@ -178,32 +196,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        guard let touch = touches.first else { return }
-//        let position = touch.location(in: self.view)
-//        let x = position.x - self.view.frame.size.width / 2
-//        let y = position.y - self.view.frame.size.height / 2
-//        
-//        let rad = atan2(y, x)
-//        print(rad)
-//    }
-    
-    var hour: Int = 0 {
-        didSet {
-            updateHands()
-        }
-    }
-    
-    var minute: Int = 0 {
-        didSet {
-            updateHands()
-        }
-    }
-    
     func updateHands(){
-        var shortHandRad = 2 * CGFloat.pi / 12 * CGFloat(hour)
-        shortHandRad += 2 * CGFloat.pi / 12 / CGFloat(60) * CGFloat(minute)
-        let longHandRad = 2 * CGFloat.pi / CGFloat(60) * CGFloat(minute)
+        var shortHandRad = 2 * CGFloat.pi / 12 * CGFloat(time.hour)
+        shortHandRad += 2 * CGFloat.pi / 12 / CGFloat(60) * CGFloat(time.minute)
+        let longHandRad = 2 * CGFloat.pi / CGFloat(60) * CGFloat(time.minute)
         
         longHand.transform = CGAffineTransform(rotationAngle: longHandRad)
         shortHand.transform = CGAffineTransform(rotationAngle: shortHandRad)
@@ -211,8 +207,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        hour = 10
-        minute = 44
         
         do {
             guard let path = Bundle.main.path(forResource: "good", ofType: "mp3") else { return }
